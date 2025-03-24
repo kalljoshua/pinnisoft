@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/providers/task_provider.dart';
 import 'screens/mobile/home_screen.dart';
+import 'screens/web/home_screen_web.dart';
 
 void main() {
   runApp(
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Task Manager',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
-      home: HomeScreen(),
+      home: kIsWeb ? HomeScreenWeb() : HomeScreen(),
     );
   }
 }

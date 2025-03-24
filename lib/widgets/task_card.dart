@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
 import '../screens/mobile/task_screen.dart';
+import '../screens/web/task_screen_web.dart';
 import 'confirm_dialog.dart';
+
 class TaskCard extends StatelessWidget {
   final Task task;
 
@@ -45,10 +47,33 @@ class TaskCard extends StatelessWidget {
   }
 
   void _editTask(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => TaskScreen(task: task)),
-    );
+    if (Theme.of(context).platform == TargetPlatform.android || Theme.of(context).platform == TargetPlatform.iOS) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TaskScreen(task: task)),
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => Align(
+          alignment: Alignment.centerRight,
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width * 0.4,
+            decoration: BoxDecoration(
+              color: Color(0xFF181A2E),
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: TaskScreenWeb(task: task),
+          ),
+        ),
+      );
+    }
   }
 
   void _deleteTask(BuildContext context) {

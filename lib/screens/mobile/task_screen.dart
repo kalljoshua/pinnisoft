@@ -6,8 +6,6 @@ import '../../core/providers/task_provider.dart';
 import '../../models/task.dart';
 import '../../widgets/confirm_dialog.dart';
 
-import '../web/task_screen_web.dart' if (dart.library.io) 'task_screen.dart';
-
 class TaskScreen extends StatefulWidget {
   final Task? task; // If null, it's adding a new task.
 
@@ -67,10 +65,6 @@ class _TaskScreenState extends State<TaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
-      return TaskScreenWeb(task: widget.task);
-    }
-
     return Scaffold(
       backgroundColor: Color(0xFF181A2E),
       appBar: AppBar(

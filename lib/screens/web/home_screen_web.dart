@@ -16,6 +16,29 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
     Provider.of<TaskProvider>(context, listen: false).loadTasks();
   }
 
+  void _openTaskScreenWeb(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Align(
+        alignment: Alignment.centerRight,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width * 0.4,
+          decoration: BoxDecoration(
+            color: Color(0xFF181A2E),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+          ),
+          child: TaskScreenWeb(),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var tasks = Provider.of<TaskProvider>(context).tasks;
@@ -29,12 +52,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.purple,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TaskScreenWeb()),
-          );
-        },
+        onPressed: () => _openTaskScreenWeb(context),
         child: Icon(Icons.add, color: Colors.white),
       ),
       body: Padding(
@@ -51,6 +69,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                   crossAxisCount: 3,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
+                  childAspectRatio: 13 / 3,
                 ),
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {

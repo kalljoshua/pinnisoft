@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../core/providers/task_provider.dart';
 import '../../widgets/task_card.dart';
 import 'task_screen.dart';
-import '../web/home_screen_web.dart' if (dart.library.io) 'home_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -20,10 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
-      return HomeScreenWeb();
-    }
-
     var tasks = Provider.of<TaskProvider>(context).tasks;
 
     return Scaffold(
