@@ -1,10 +1,59 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
-
+import '../screens/mobile/task_screen.dart';
+import 'confirm_dialog.dart';
 class TaskCard extends StatelessWidget {
   final Task task;
 
-  const TaskCard({required this.task});
+  const TaskCard({Key? key, required this.task}) : super(key: key);
+
+  void _showTaskDetails(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.black87,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                task.title,
+                style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(task.description, style: TextStyle(color: Colors.white70, fontSize: 16)),
+              SizedBox(height: 15),
+              LinearProgressIndicator(
+                value: task.progress / 100,
+                color: Colors.green,
+                backgroundColor: Colors.grey.shade700,
+              ),
+              SizedBox(height: 5),
+              Text("${task.progress.toInt()}% Complete", style: TextStyle(color: Colors.white70)),
+              SizedBox(height: 15),
+              Text("Days Left: ${task.daysLeft}", style: TextStyle(color: Colors.white70, fontSize: 16)),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _editTask(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TaskScreen(task: task)),
+    );
+  }
+
+  void _deleteTask(BuildContext context) {
+    showDeleteTaskDialog(context, task);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +61,18 @@ class TaskCard extends StatelessWidget {
       color: task.progress < 50 ? Colors.purple : Colors.black54,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
+        onTap: () => _showTaskDetails(context), // Show details on tap
         title: Text(task.title, style: TextStyle(color: Colors.white, fontSize: 18)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(task.description, style: TextStyle(color: Colors.white54)),
             SizedBox(height: 5),
-            LinearProgressIndicator(value: task.progress / 100, color: Colors.green),
+            LinearProgressIndicator(
+              value: task.progress / 100,
+              color: Colors.green,
+              backgroundColor: Colors.grey.shade700,
+            ),
             SizedBox(height: 5),
             Text("${task.daysLeft} Days Left", style: TextStyle(color: Colors.white70)),
           ],
@@ -27,14 +81,20 @@ class TaskCard extends StatelessWidget {
           color: Colors.white,
           onSelected: (String value) {
             if (value == 'edit') {
-              // Edit task logic
+              _editTask(context);
             } else if (value == 'delete') {
-              // Delete task logic
+              _deleteTask(context);
             }
           },
           itemBuilder: (context) => [
-            PopupMenuItem(value: 'edit', child: Text("Edit")),
-            PopupMenuItem(value: 'delete', child: Text("Delete")),
+            PopupMenuItem(
+              value: 'edit',
+              child: Text("Edit", style: TextStyle(color: Colors.black)),
+            ),
+            PopupMenuItem(
+              value: 'delete',
+              child: Text("Delete", style: TextStyle(color: Colors.black)),
+            ),
           ],
         ),
       ),

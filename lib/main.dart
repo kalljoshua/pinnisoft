@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/providers/task_provider.dart';
-import 'screens/home_screen.dart';
+import 'screens/mobile/home_screen.dart';
 
 void main() {
   runApp(
